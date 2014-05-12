@@ -1,6 +1,11 @@
 <!-- BANNER -->
 <div class="pure-g-r title">
-		<div class="pure-u-1"><span class='heading-text'>#</span><input class='hashtag heading-text' type='text' value='{{hashtag}}'/></div>
+		<div class="pure-u-4-5">
+			<span class='heading-text'>#</span><input class='hashtag heading-text' type='text' value='{{hashtag}}'/>
+		</div>
+		<div class="pure-u-1-5">
+			<a href='https://github.com/DDKnoll/Instagram-Infinite-Scroll'>Git Repo</a>
+		</div>
 </div>
 	<!-- Loader -->
 <!-- Bottom Scrollable -->
@@ -41,11 +46,14 @@
 	<div class="lightbox-border">
 		<i class="icon-cancel-circled" onclick='insta.set("lightbox", false);'></i>
 		<div class="lightbox-scrollable">
+
 			{{#(current >= 0)}}
 			<!-- Picture Lightboxes -->
-				<img src="{{instagramData.data[current].images.standard_resolution.url}}" alt="">
+				<img class='instagram-post-image' src="{{instagramData.data[current].images.standard_resolution.url}}" alt="">
 				<div class="comment">
-					<img class='profile-picture' src="{{instagramData.data[current].user.profile_picture}}" alt="">
+					<a target='_blank' href='http://instagram.com/{{instagramData.data[current].user.username}}'>
+            <img class='profile-picture' src="{{instagramData.data[current].user.profile_picture}}" alt="">
+          </a>
 					<h4 class="poster-user">@{{instagramData.data[current].user.username}}</h4>
 					<div>
 						<!--<p class="likes">{{instagramData.data[current].likes.count}} <i class="icon-heart"></i></p>-->
@@ -55,7 +63,9 @@
 				<div style='clear:both;'></div>
 				{{#instagramData.data[current].comments.data:c}}
 				<div class="comment">
-					<img class='profile-picture' src="{{instagramData.data[current].comments.data[c].from.profile_picture}}" alt="">
+					<a target='_blank' href='http://instagram.com/{{instagramData.data[current].comments.data[c].from.username}}'>
+            <img class='profile-picture' src="{{instagramData.data[current].comments.data[c].from.profile_picture}}" alt="">
+          </a>
 					<h4 class="poster-user">@{{instagramData.data[current].comments.data[c].from.username}}</h4>
 					<span class="comment-content">{{instagramData.data[current].comments.data[c].text}}</span>
 				</div>
@@ -64,7 +74,8 @@
 				<div class="comment">
 					<a class='instagram-link' href="{{instagramData.data[current].link}}" target='_blank'><i class="icon-instagramm"></i><p class='like-comment'>Like or Comment on Instagram</p></a>
 				</div>
-			{{/(current != -1)}}
+			{{/(current >= 0)}}
+
 		</div>
 	</div>
 </div>
