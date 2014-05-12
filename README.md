@@ -13,7 +13,18 @@ Sample Usage:
         el: 'template-target',
         template: template,
         clientID: 'Your Instagram Client ID',
-        hashtag: 'webdesign'
+        hashtag: 'webdesign',
+        complete: function(){
+            //Infinite Scroll Window Bindings
+            $(window).scroll(function(evt){
+              var bod = $('body')[0];
+              pageHeight = bod.offsetHeight;
+              bottomScroll = window.scrollY + bod.clientHeight;
+              if(pageHeight - bottomScroll < 200){
+                  insta.load('after');
+              }
+            });
+        }
       });
     });
     
