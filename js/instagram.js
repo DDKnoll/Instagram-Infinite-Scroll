@@ -22,6 +22,10 @@ var instagramFeed = Ractive.extend({
   * Loads more instagram data.  Either replaces current data, appends data before feed, or appends data after feed
   */
   load: function(method){
+    //No more older data to load. stop now.
+    if(method == 'after' && this.data.endOfFeed){
+      return false;
+    }
     if(this.data.loading == true){
       //We can only be loading one script at a time.
       return false;

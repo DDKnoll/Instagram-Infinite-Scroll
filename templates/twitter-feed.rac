@@ -42,8 +42,7 @@
 				<h3>Loading More Images</h3>
 			{{/loading}}
 			{{#endOfFeed}}
-				<h3>You have reached the end of the Instagram #SalemMatters feed.</h3>
-				<p><a class='instructions-button' onClick='insta.set("lightbox", true); insta.set("current", -1);'>Add your own Photo</a></p>
+				<h3>You have reached the end of the Instagram #{{hashtag}} feed.</h3>
 			{{/endOfFeed}}
 		</div>
 
