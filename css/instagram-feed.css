@@ -15,6 +15,10 @@ body{
     font-family: 'Raleway', sans-serif;
 }
 
+.centered{
+  text-align:center;
+}
+
 .button{
   border-radius:1em;
   padding:1em;
