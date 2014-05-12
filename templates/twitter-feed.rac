@@ -1,0 +1,70 @@
+<!-- BANNER -->
+<div class="pure-g-r title">
+		<div class="pure-u-1"><span class='heading-text'>#</span><input class='hashtag heading-text' type='text' value='{{hashtag}}'/></div>
+</div>
+	<!-- Loader -->
+<!-- Bottom Scrollable -->
+<div class="main-feed">
+	<!-- FEED -->
+	<div class="insta-target pure-g-r">
+		<!-- Loader -->
+		<div class="pure-u-1 loader">
+			{{#instagramData.data.length == 0}}
+				<img src="img/spiffygif_104x104.gif" width='104px' height='104px' alt="">
+				<h3>Loading Instagram Feed</h3>
+				<p class='dimmer'>
+					Notice: You must have access to Instagram to view this content.</p>
+				<p class='dimmer'>
+					For the best experience use the newest version of the Chrome, Internet Explorer, or Firefox browser.
+				</p>
+			{{/instagramData.data.length == 0}}
+		</div>
+		<div class="pure-u-1">
+			<div class='button' onclick='insta.getNewer();'>Load newer posts</div>
+		</div>
+		<!-- Picture Feed -->
+		{{#instagramData.data:index}}
+		<div class="pure-u-1-3">
+			<div class="insta-image" onclick='insta.set("lightbox", true); insta.set("current", {{index}})'>
+				<img src="{{instagramData.data[index].images.standard_resolution.url}}" alt="" />
+			</div>
+		</div>
+		{{/instagramData.data}}
+		<div class="pure-u-1">
+			<div class='button' onclick='insta.getOlder();'>Load older posts</div>
+		</div>
+	</div>
+</div>
+<!-- LIGHTBOX -->
+<div class="lightbox-outer{{#lightbox}} active{{/lightbox}}" onclick='insta.set("lightbox", false);'>
+
+	<div class="lightbox-border">
+		<i class="icon-cancel-circled" onclick='insta.set("lightbox", false);'></i>
+		<div class="lightbox-scrollable">
+			{{#(current >= 0)}}
+			<!-- Picture Lightboxes -->
+				<img src="{{instagramData.data[current].images.standard_resolution.url}}" alt="">
+				<div class="comment">
+					<img class='profile-picture' src="{{instagramData.data[current].user.profile_picture}}" alt="">
+					<h4 class="poster-user">@{{instagramData.data[current].user.username}}</h4>
+					<div>
+						<!--<p class="likes">{{instagramData.data[current].likes.count}} <i class="icon-heart"></i></p>-->
+					</div>
+					<div class="caption">{{instagramData.data[current].caption.text}}</div>
+				</div>
+				<div style='clear:both;'></div>
+				{{#instagramData.data[current].comments.data:c}}
+				<div class="comment">
+					<img class='profile-picture' src="{{instagramData.data[current].comments.data[c].from.profile_picture}}" alt="">
+					<h4 class="poster-user">@{{instagramData.data[current].comments.data[c].from.username}}</h4>
+					<span class="comment-content">{{instagramData.data[current].comments.data[c].text}}</span>
+				</div>
+				<div style='clear:both;'></div>
+				{{/instagramData.data[current].comments.data}}
+				<div class="comment">
+					<a class='instagram-link' href="{{instagramData.data[current].link}}" target='_blank'><i class="icon-instagramm"></i><p class='like-comment'>Like or Comment on Instagram</p></a>
+				</div>
+			{{/(current != -1)}}
+		</div>
+	</div>
+</div>
