@@ -2,7 +2,7 @@
  *
  * Instagram Infinite Scroll Loader
  *
- *
+ * by Dugan Knoll
  */
 
 var instagramFeed = Ractive.extend({
@@ -11,13 +11,24 @@ var instagramFeed = Ractive.extend({
     instagramData: [],
     current: -1,
     min:0,
-    max:0
+    max:0,
+    lightbox:false,
+    endOfFeed:false
   },
 
  /**
-  * Load('')
+  * Load('replace' / 'before' / 'after')
+  *
+  * Loads more instagram data.  Either replaces current data, appends data before feed, or appends data after feed
   */
   load: function(method){
+    if(this.data.loading == true){
+      //We can only be loading one script at a time.
+      return false;
+    }
+    else {
+      this.set('loading', true);
+    }
     var tag = document.createElement('script');
     tag.id = 'instagram-script-loader';
     if (method=='replace'){
@@ -27,18 +38,41 @@ var instagramFeed = Ractive.extend({
       tag.src = "https://api.instagram.com/v1/tags/"+this.data.hashtag+"/media/recent?client_id="+this.clientID+"&amp;count=15&amp;callback=instagramReceiverFrontAppend&amp;min_id="+this.data.instagramData.pagination.min_tag_id;
     }
     if (method=='after'){
+      if(this.data.endOfFeed == true){
+        return false;
+      }
       tag.src = "https://api.instagram.com/v1/tags/"+this.data.hashtag+"/media/recent?client_id="+this.clientID+"&amp;count=15&amp;callback=instagramReceiverRearAppend&amp;max_id="+this.data.instagramData.pagination.next_max_tag_id;
     }
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   },
-  getOlder: function(){
-    this.load('after');
-  },
+
+  /**
+   * Endpoint for loading newer photos
+   */
   getNewer: function(){
     this.load('before');
   },
+  /**
+   * Endpoint for loading older photos
+   */
+  getOlder: function(){
+    this.load('after');
+  },
 
+
+  /********
+   * INIT FUNCTION.
+   *
+
+   * Make sure ClientID and hashtag are provided.
+
+   * Bind Instagram Data Callbacks to window
+     - replaceData(data)
+     - frontAppend(data)
+     - rearAppend(data)
+
+   */
   init: function(options){
 
     //Init Client ID
@@ -58,9 +92,10 @@ var instagramFeed = Ractive.extend({
       this.data.hashtag = options.hashtag;
     }
 
-    //An Anonymous function generates functions for replacing, and appending to front and back of the current data.
-    this.replaceData = function(data){
-      this.set('instagramData', data);
+    //Replace data.
+    this.replaceData = function(newData){
+      this.set('instagramData', newData);
+      this.set('loading', false);
     }
     window.instagramReceiverReplace = (function(obj){
       return function (data) {
@@ -68,11 +103,13 @@ var instagramFeed = Ractive.extend({
       }
     })(this);
 
-    this.frontAppend = function(instaData){
+    //Append data to rear and update data structure.
+    this.frontAppend = function(newData){
       console.log('front Append');
-      console.log(instaData);
-      this.set('instagramData.data', instaData.data.concat(this.data.instagramData.data));
-      this.data.instagramData.pagination.min_tag_id = instaData.pagination.min_tag_id;
+      console.log(newData);
+      this.set('instagramData.data', newData.data.concat(this.data.instagramData.data));
+      this.data.instagramData.pagination.min_tag_id = newData.pagination.min_tag_id;
+      this.set('loading', false);
     }
     window.instagramReceiverFrontAppend = (function(obj){
       return function (data) {
@@ -80,11 +117,18 @@ var instagramFeed = Ractive.extend({
       }
     })(this);
 
-    this.rearAppend = function(instaData){
+    //Append data to rear and update data structure.
+    this.rearAppend = function(newData){
       console.log('rear Append');
-      console.log(instaData);
-      this.set('instagramData.data', this.data.instagramData.data.concat(instaData.data));
-      this.data.instagramData.pagination.next_max_tag_id = instaData.pagination.next_max_tag_id;
+      console.log(newData);
+      this.set('instagramData.data', this.data.instagramData.data.concat(newData.data));
+      //Set the pagination
+      if(newData.pagination.next_max_tag_id === undefined){
+        this.set('endOfFeed', true);
+      } else{
+        this.data.instagramData.pagination.next_max_tag_id = newData.pagination.next_max_tag_id;
+      }
+      this.set('loading', false);
     }
     window.instagramReceiverRearAppend = (function(obj){
       return function (data) {

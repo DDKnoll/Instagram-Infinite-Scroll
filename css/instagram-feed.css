@@ -20,7 +20,7 @@ body{
   padding:1em;
   border: 1px solid #29e;
   max-width:250px;
-  margin:auto;
+  margin:1em auto;
   text-align:center;
   cursor:pointer;
 }
