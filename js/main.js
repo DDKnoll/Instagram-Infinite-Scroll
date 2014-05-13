@@ -12,7 +12,7 @@ $.get( 'templates/twitter-feed.rac').then( function ( template ) {
       el: 'template-target',
       template: template,
       clientID: 'fd88310566744275a3d68092d9c175d1',
-      hashtag: 'webdesign',
+      search: 'webdesign',
       complete: function(){
 
         //Infinite Scroll Window Bindings
@@ -22,6 +22,9 @@ $.get( 'templates/twitter-feed.rac').then( function ( template ) {
           bottomScroll = window.scrollY + bod.clientHeight;
           if(pageHeight - bottomScroll < 200){
             insta.load('after');
+          }
+          else if(window.scrollY <= 0){
+            insta.load('before');
           }
         });
 

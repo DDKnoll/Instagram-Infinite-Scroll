@@ -1,7 +1,7 @@
 <!-- BANNER -->
 <div class="pure-g-r title">
 		<div class="pure-u-4-5">
-			<span class='heading-text'>#</span><input class='hashtag heading-text' type='text' value='{{hashtag}}'/>
+			<span class='heading-text'>#</span><input class='hashtag heading-text' type='text' value='{{search}}'/>
 		</div>
 		<div class="pure-u-1-5">
 			<a href='https://github.com/DDKnoll/Instagram-Infinite-Scroll'><i class="icon-github"></i></a>
@@ -15,20 +15,26 @@
 	<!-- FEED -->
 	<div class="insta-target pure-g-r">
 		<!-- Loader -->
-		<div class="pure-u-1 loader">
+		<div class="pure-u-1-3 centered">
+			<h4>Showing Results for #{{searched}}</h4>
+		</div>
+		<div class="pure-u-1-3 centered">
+			<h3>{{#loading}}<i class="icon-spin6 animate-spin"></i>Searching Instagram for #{{search}}{{/loading}}<br>{{message}}</h3>
+		</div>
+		<div class="pure-u-1-3 centered">
 			{{#instagramData.data.length == 0}}
-				<i class="icon-spin6 animate-spin"></i>
-				<h3>Loading Instagram Feed</h3>
+				{{# !loading }}
 				<p class='dimmer'>
 					Notice: You must have access to Instagram to view this content.</p>
 				<p class='dimmer'>
 					For the best experience use the newest version of the Chrome, Internet Explorer, or Firefox browser.
 				</p>
+				{{/ !loading }}
 			{{/instagramData.data.length == 0}}
 		</div>
-		<div class="pure-u-1">
+<!-- 		<div class="pure-u-1">
 			<div class='button' onclick='insta.getNewer();'>Load newer Instagram posts</div>
-		</div>
+		</div> -->
 		<!-- Picture Feed -->
 		{{#instagramData.data:index}}
 		<div class="pure-u-1-3">
@@ -40,9 +46,7 @@
 
 		<!-- LOADING AND END OF FEED -->
 		<div class="pure-u-1 centered">
-			{{#loading}}
-				<h3><i class="icon-spin6 animate-spin"></i> Loading More Images</h3>
-			{{/loading}}
+				<h3>&nbsp;{{#loading}}<i class="icon-spin6 animate-spin"></i> Loading More Images{{/loading}}</h3>
 			{{#endOfFeed}}
 				<h3>You have reached the end of the Instagram #{{hashtag}} feed.</h3>
 			{{/endOfFeed}}
