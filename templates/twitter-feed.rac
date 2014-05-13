@@ -4,7 +4,9 @@
 			<span class='heading-text'>#</span><input class='hashtag heading-text' type='text' value='{{hashtag}}'/>
 		</div>
 		<div class="pure-u-1-5">
-			<a href='https://github.com/DDKnoll/Instagram-Infinite-Scroll'>Git Repo</a>
+			<a href='https://github.com/DDKnoll/Instagram-Infinite-Scroll'><i class="icon-github"></i></a>
+			<a href='https://twitter.com/DDKnoll'><i class="icon-twitter"></i></a>
+			<a href='https://plus.google.com/share?url=http://ddknoll.github.io/Instagram-Infinite-Scroll/'><i class="icon-gplus"></i></a>
 		</div>
 </div>
 	<!-- Loader -->
@@ -15,7 +17,7 @@
 		<!-- Loader -->
 		<div class="pure-u-1 loader">
 			{{#instagramData.data.length == 0}}
-				<img src="img/spiffygif_104x104.gif" width='104px' height='104px' alt="">
+				<i class="icon-spin6 animate-spin"></i>
 				<h3>Loading Instagram Feed</h3>
 				<p class='dimmer'>
 					Notice: You must have access to Instagram to view this content.</p>
@@ -25,7 +27,7 @@
 			{{/instagramData.data.length == 0}}
 		</div>
 		<div class="pure-u-1">
-			<div class='button' onclick='insta.getNewer();'>Load newer posts</div>
+			<div class='button' onclick='insta.getNewer();'>Load newer Instagram posts</div>
 		</div>
 		<!-- Picture Feed -->
 		{{#instagramData.data:index}}
@@ -39,7 +41,7 @@
 		<!-- LOADING AND END OF FEED -->
 		<div class="pure-u-1 centered">
 			{{#loading}}
-				<h3>Loading More Images</h3>
+				<h3><i class="icon-spin6 animate-spin"></i> Loading More Images</h3>
 			{{/loading}}
 			{{#endOfFeed}}
 				<h3>You have reached the end of the Instagram #{{hashtag}} feed.</h3>
