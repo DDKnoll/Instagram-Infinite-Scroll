@@ -22,10 +22,14 @@ body{
 a i{
   color: #29e;
   font-size: 36px;
+}
+.title a i{
   padding: 3px;
   line-height: 3em;
 }
-
+.title .icons{
+  text-align:center;
+}
 .button{
   border-radius:1em;
   padding:1em;
@@ -143,6 +147,9 @@ Lightbox
   height: 100%;
   overflow:auto
 }
+.lightbox-scrollable .comment{
+  padding:1em;
+}
 .lightbox-scrollable img{
   width:640px;
   max-width:100%;
@@ -164,11 +171,10 @@ Lightbox
 .lightbox-scrollable p.like-comment{
   display: inline-block;
   position: relative;
-  bottom: .8em;
   color: #3E8BE0;
 }
 .block-list {
-  padding: 1em;
+  padding: 1.6em;
 }
 .lightbox-scrollable p.link a{
   color: #eee;
@@ -183,7 +189,7 @@ Lightbox
   color: #555;
 }
 .lightbox-scrollable .instagram-link i{
-  font-size: 60px;
+  font-size: 1.7em;
 }
 /*****************
 Media Queries
