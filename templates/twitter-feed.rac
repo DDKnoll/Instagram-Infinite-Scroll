@@ -1,9 +1,9 @@
 <!-- BANNER -->
 <div class="pure-g-r title">
-		<div class="pure-u-4-5">
+		<div class="pure-u-2-3">
 			<span class='heading-text'>#</span><input class='hashtag heading-text' type='text' value='{{search}}'/>
 		</div>
-		<div class="pure-u-1-5 icons">
+		<div class="pure-u-1-3 icons">
 			<a class='icon' href='https://github.com/DDKnoll/Instagram-Infinite-Scroll'><i class="icon-github"></i></a>
 			<a class='icon' href='https://twitter.com/DDKnoll'><i class="icon-twitter"></i></a>
 			<a class='icon' href='https://plus.google.com/share?url=http://ddknoll.github.io/Instagram-Infinite-Scroll/'><i class="icon-gplus"></i></a>
