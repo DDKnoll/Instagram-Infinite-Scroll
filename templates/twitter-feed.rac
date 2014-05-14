@@ -21,10 +21,10 @@
 		<div class="pure-u-1-3 centered">
 			<h3>{{#loading}}<i class="icon-spin6 animate-spin"></i>Searching Instagram for #{{search}}<br>{{/loading}}{{message}}</h3>
 		</div>
-		<div class='pure-u-1-3'>
-			<h4>
-				Share URL <input class='Share' value='ddknoll.github.io/Instagram-Infinite-Scroll/?{{search}}'>
-			</h4>
+		<div class='pure-u-1-3 centered'>
+			<h3>
+				<a href='http://ddknoll.github.io/Instagram-Infinite-Scroll/?{{search}}'>Shareable #{{search}} link</a>
+			</h3>
 		</div>
 		{{#instagramData.data.length == 0}}
 			{{# !loading }}
