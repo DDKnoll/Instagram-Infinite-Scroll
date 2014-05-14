@@ -7,17 +7,6 @@
 
 var instagramFeed = Ractive.extend({
   lazy:true,
-  data: {
-    instagramData: [],
-    current: -1,
-    min:0,
-    max:0,
-    lightbox:false,
-    endOfFeed:false,
-    postsPerPage:6,
-    method: 'tags',
-    message: ''
-  },
 
   makeQuery: function(method){
     var query = '';
@@ -90,6 +79,19 @@ var instagramFeed = Ractive.extend({
    */
   init: function(options){
 
+
+    // Initialize Parameters
+    this.data.instagramData = [];
+    this.data.current = -1;
+    this.data.min = 0;
+    this.data.max = 0,
+    this.data.lightbox = false;
+    this.data.endOfFeed = false;
+    this.data.postsPerPage = 6;
+    this.data.method = 'tags';
+    this.data.message = '';
+
+
     //Init Client ID
     if(options.clientID == undefined){
       console.log('No Client ID Provided');
@@ -98,14 +100,16 @@ var instagramFeed = Ractive.extend({
     } else{
       this.data.clientID = options.clientID;
     }
-    //Init hashtag
-    if(options.search == undefined){
+
+    //Check URL for search parameter
+    query = (window.location.search.length ? window.location.search.split('=')[1] : undefined);
+    //Init search
+    if(!query && options.search == undefined){
       console.log('No Hashtag Provided');
       this.success = false;
       return false;
     } else{
-      this.data.search = options.search;
-      this.data.searched = options.search;
+      this.data.search = this.data.searched  = (query !== undefined ? query: options.search);
     }
 
     //Replace data.
@@ -117,6 +121,7 @@ var instagramFeed = Ractive.extend({
         this.set('instagramData', newData);
         this.set('searched', this.data.search);
         this.set('message', '');
+        this.set('endOfFeed', false);
       }
       this.set('loading', false);
     }

@@ -64,7 +64,14 @@
 
 			{{#(current >= 0)}}
 			<!-- Picture Lightboxes -->
-				<img class='instagram-post-image' src="{{instagramData.data[current].images.standard_resolution.url}}" alt="">
+				{{# instagramData.data[current].videos !== null }}
+					<video class='instagram-post-image'>
+						<source src="{{instagramData.data[current].videos.standard_resolution.url}}" alt="">
+					</video>
+				{{/ instagramData.data[current].videos !== null }}
+				{{# instagramData.data[current].videos == null }}
+					<img class='instagram-post-image' src="{{instagramData.data[current].images.standard_resolution.url}}" alt="">
+				{{/ instagramData.data[current].videos == null }}
 				<div class="comment">
 					<a target='_blank' href='http://instagram.com/{{instagramData.data[current].user.username}}'>
             <img class='profile-picture' src="{{instagramData.data[current].user.profile_picture}}" alt="">
