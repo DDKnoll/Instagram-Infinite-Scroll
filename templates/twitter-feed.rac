@@ -21,7 +21,11 @@
 		<div class="pure-u-1-3 centered">
 			<h3>{{#loading}}<i class="icon-spin6 animate-spin"></i>Searching Instagram for #{{search}}<br>{{/loading}}{{message}}</h3>
 		</div>
-		<div class='pure-u-1-3'></div>
+		<div class='pure-u-1-3'>
+			<h4>
+				Share URL <input class='Share' value='ddknoll.github.io/Instagram-Infinite-Scroll/?{{search}}'>
+			</h4>
+		</div>
 		{{#instagramData.data.length == 0}}
 			{{# !loading }}
 			<div class="pure-u-1 centered">
@@ -56,22 +60,27 @@
 	</div>
 </div>
 <!-- LIGHTBOX -->
-<div class="lightbox-outer{{#lightbox}} active{{/lightbox}}" onclick='insta.set("lightbox", false);'>
+<div class="lightbox-outer{{#lightbox}} active{{/lightbox}}"  onclick='insta.set("lightbox", false);' >
 
 	<div class="lightbox-border">
-		<i class="icon-cancel-circled" onclick='insta.set("lightbox", false);'></i>
 		<div class="lightbox-scrollable">
-
+			<div class='big-close' onclick='insta.set("lightbox", false);' >
+					X
+			</div>
 			{{#(current >= 0)}}
-			<!-- Picture Lightboxes -->
-				{{# instagramData.data[current].videos !== null }}
-					<video class='instagram-post-image'>
-						<source src="{{instagramData.data[current].videos.standard_resolution.url}}" alt="">
-					</video>
-				{{/ instagramData.data[current].videos !== null }}
-				{{# instagramData.data[current].videos == null }}
+			<!-- Video Lightboxes -->
+			<!--
+				{{# instagramData.data[current].videos !== undefined }}
+				<video src="{{instagramData.data[current].videos.standard_resolution.url}}" controls>
+				  Your browser does not support the <code>video</code> element.
+				</video>
+				{{/ instagramData.data[current].videos !== undefined }}
+
+				{{# instagramData.data[current].videos == undefined }}
 					<img class='instagram-post-image' src="{{instagramData.data[current].images.standard_resolution.url}}" alt="">
-				{{/ instagramData.data[current].videos == null }}
+				{{/ instagramData.data[current].videos == undefined }}
+			-->
+			<img class='instagram-post-image' src="{{instagramData.data[current].images.standard_resolution.url}}" alt="">
 				<div class="comment">
 					<a target='_blank' href='http://instagram.com/{{instagramData.data[current].user.username}}'>
             <img class='profile-picture' src="{{instagramData.data[current].user.profile_picture}}" alt="">

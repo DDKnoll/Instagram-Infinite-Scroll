@@ -102,7 +102,7 @@ var instagramFeed = Ractive.extend({
     }
 
     //Check URL for search parameter
-    query = (window.location.search.length ? window.location.search.split('=')[1] : undefined);
+    query = (window.location.search.length ? window.location.search.slice(1) : undefined);
     //Init search
     if(!query && options.search == undefined){
       console.log('No Hashtag Provided');

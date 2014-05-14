@@ -56,12 +56,13 @@ h1{
   letter-spacing: -1px;
   color: #555;
 }
-input.hashtag{
+input.hashtag, input.share{
   text-align:left;
   box-shadow:none;
   border:none;
   border-bottom:1px dotted #555;
   max-width:90%;
+
 }
 /*****************
 Title Banner
@@ -183,7 +184,19 @@ Lightbox
 .lightbox-scrollable span.comment-user{
   color: #BB91C5;
 }
-
+.lightbox-scrollable .big-close{
+  padding: 0.7em;
+  font-size: 1.3em;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  cursor:pointer;
+}
+.lightbox-scrollable embed, .lightbox-scrollable video{
+  width:640px;
+  height:640px;
+  max-width:100%;
+}
 
 .lightbox-scrollable .instagram-link{
   color: #555;
