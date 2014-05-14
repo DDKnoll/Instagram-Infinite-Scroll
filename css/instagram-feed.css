@@ -19,6 +19,17 @@ body{
   text-align:center;
 }
 
+a i{
+  color: #29e;
+  font-size: 36px;
+}
+.title a i{
+  padding: 3px;
+  line-height: 3em;
+}
+.title .icons{
+  text-align:center;
+}
 .button{
   border-radius:1em;
   padding:1em;
@@ -45,11 +56,13 @@ h1{
   letter-spacing: -1px;
   color: #555;
 }
-input.hashtag{
+input.hashtag, input.share{
   text-align:left;
   box-shadow:none;
   border:none;
   border-bottom:1px dotted #555;
+  max-width:90%;
+
 }
 /*****************
 Title Banner
@@ -135,6 +148,9 @@ Lightbox
   height: 100%;
   overflow:auto
 }
+.lightbox-scrollable .comment{
+  padding:1em;
+}
 .lightbox-scrollable img{
   width:640px;
   max-width:100%;
@@ -156,10 +172,10 @@ Lightbox
 .lightbox-scrollable p.like-comment{
   display: inline-block;
   position: relative;
-  bottom: .8em;
+  color: #3E8BE0;
 }
 .block-list {
-  padding: 1em;
+  padding: 1.6em;
 }
 .lightbox-scrollable p.link a{
   color: #eee;
@@ -168,99 +184,32 @@ Lightbox
 .lightbox-scrollable span.comment-user{
   color: #BB91C5;
 }
-
+.lightbox-scrollable .big-close{
+  padding: 0.7em;
+  font-size: 1.3em;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  cursor:pointer;
+}
+.lightbox-scrollable embed, .lightbox-scrollable video{
+  width:640px;
+  height:640px;
+  max-width:100%;
+}
 
 .lightbox-scrollable .instagram-link{
   color: #555;
 }
 .lightbox-scrollable .instagram-link i{
-  font-size: 60px;
+  font-size: 1.7em;
 }
 /*****************
 Media Queries
 *****************/
 
-@media (max-width: 1200px) {
-  .title {
-    font-size:.75em;
-    letter-spacing:0;
-  }
-  .title h2.quote1{
-    top:100px;
-  }
-  .title h2.quote2{
-    top:180px;
-  }
-  .title h2.quote3{
-    top:350px;
-  }
-  h2.quote1.animated {
-    right: 60px;
-  }
-  h2.quote2.animated {
-    right: -10px;
-  }
-  h2.quote3.animated {
-    right: 15px;
-  }
-}
 @media (max-width: 767px) {
-  .title{
-    background-image: url('../img/mayor-tall.png');
-    min-height: 600px;
-  }
-  .bottom{
-    top:600px;
-  }
-  .title{
-    font-size:.9em;
-  }
-  .title .top-logo img{
-    width: 50%;
-    margin-right: 10px;
-  }
-  .title > h2.quote{
-    font-size:1.5em;
-    letter-spacing:0;
-  }
-  .title h2.quote1{
-    top:220px;
-  }
-  .title h2.quote2{
-    top:270px;
-  }
-  .title h2.quote3{
-    bottom:2em;
-    top:auto;
-  }
-  h2.quote1.animated {
-    right: 40px;
-  }
-  h2.quote2.animated {
-    right: -30px;
-  }
-  h2.quote3.animated {
-    right: 15px;
-  }
-  .instructions div{
-    padding: 0;
-  }
-}
-@media (max-width: 500px) {
-  .title h1{
-    font-size:1.6em;
-  }
-  .title .top-logo img{
-    width:75%;
-  }
-  .title > h2.quote{
-    font-size:1.2em;
-    letter-spacing:0;
-  }
-  h2.quote1.animated {
-  right: 20px;
-  }
-  h2.quote2.animated {
-  padding-right: 50px;
+  .title .heading-text{
+    font-size:36px;
   }
 }
