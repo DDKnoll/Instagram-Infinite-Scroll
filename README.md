@@ -8,7 +8,6 @@ Sample Usage:
 
     <script src="js/ractive/Ractive-legacy.0.3.9.min.js"></script><!-- Get Ractive-->
     <script src="js/instagram.js"></script> <!-- Get Instagram extension -->
-    <script id='template' type='text/ractive' src='templates/twitter-feed.rac'></script>
 
 
     /** This code is just for the infinite scroll.  You don't have to use this. */
@@ -24,13 +23,18 @@ Sample Usage:
         });
     }
 
-    //Create New Instagram Feed
-    insta = new instagramFeed({
-      el: 'template-target',
-      template: template,
-      clientID: 'Your Instagram Client ID',
-      hashtag: 'webdesign',
-      complete: infiniteScrollBinding
+    // Get our template file.
+    $.get( 'templates/twitter-feed.rac').then( function ( template ) {
+
+      //Create New Instagram Feed
+      insta = new instagramFeed({
+        el: 'template-target',
+        template: template,
+        clientID: 'Your Instagram Client ID',
+        hashtag: 'webdesign',
+        complete: infiniteScrollBinding
+      });
+
     });
 
 

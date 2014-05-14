@@ -7,17 +7,17 @@ Too many javascript applications contain repetitive code.  First, you select a a
 
 I love jQuery, but this is bad practice. Too many lines of code and searching by css selectors will slow down your code.
 
-## The JS Framework approach
+## The JS MVC approach
 
 There are plenty of shiny new javascript frameworks to help you be organized and efficient while writing code:
 
 [ToDoMVC - JS Frameworks listing](http://todomvc.com/)
 
-These frameworks provide methods for ajax requests, templating, code-compiling, testing, data-binding, and much more.  
+Most of these applications enforce an MVC model to seperate dependencies, updating, and flow-control. These frameworks provide methods for ajax requests, templating, code-compiling, testing, data-binding, and much more.  
 
 ## The Ractive Approach
 
-Ractive does one thing and it does one thing wonderfully.  Binding a JSON data object to an HTML model.  Take a quick look at this sample code.
+Ractive does one thing and it does one thing wonderfully.  Binding a JSON data object to an HTML view.  Take a quick look at this sample code.
 
 #### HTML
 
@@ -38,3 +38,13 @@ Ractive does one thing and it does one thing wonderfully.  Binding a JSON data o
       template: '<p>{{greeting}}, {{recipient}}!</p>',
       data: { x: 5, y:6 , title: 'Multiplying Numbers'}
     });
+
+
+That was easy, right?  Alright, now you have a ractive javascript object and an html template rendered.  Try checking the data model using `ractive.get()`.
+
+Now you can update the HTML at any time by using ractive.set().  Lets try for example, `ractive.set('x', 10);`.  As you can see, the 
+
+
+### Ractive is deterministic 
+
+Having all of your data bound into one data structure is actually pretty incredible.  You have a Single Source of Truth (SSOT) data object and your HTML template is deterministic.  By deterministic, I mean there is one state that your HTML will be in for a specific data structure (unless some other javascript messed with the template).

@@ -101,15 +101,13 @@ var instagramFeed = Ractive.extend({
       this.data.clientID = options.clientID;
     }
 
-    //Check URL for search parameter
-    query = (window.location.search.length ? window.location.search.slice(1) : undefined);
     //Init search
-    if(!query && options.search == undefined){
+    if(options.search == undefined){
       console.log('No Hashtag Provided');
       this.success = false;
       return false;
     } else{
-      this.data.search = this.data.searched  = (query !== undefined ? query: options.search);
+      this.data.search = this.data.searched  = options.search;
     }
 
     //Replace data.
