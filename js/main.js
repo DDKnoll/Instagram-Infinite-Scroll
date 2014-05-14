@@ -12,6 +12,22 @@ $.get( 'templates/twitter-feed.rac').then( function ( template ) {
       el: 'template-target',
       template: template,
       clientID: 'fd88310566744275a3d68092d9c175d1',
-      hashtag: 'webdesign'
+      search: 'dribbble',
+      complete: function(){
+
+        //Infinite Scroll Window Bindings
+        $(window).scroll(function(evt){
+          var bod = $('body')[0];
+          pageHeight = bod.offsetHeight;
+          bottomScroll = window.scrollY + bod.clientHeight;
+          if(pageHeight - bottomScroll < 200){
+            insta.load('after');
+          }
+          else if(window.scrollY <= 0){
+            insta.load('before');
+          }
+        });
+
+      }
     });//Ractive init
 });//Get Template

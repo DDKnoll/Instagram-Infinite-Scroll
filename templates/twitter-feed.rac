@@ -1,10 +1,12 @@
 <!-- BANNER -->
 <div class="pure-g-r title">
-		<div class="pure-u-4-5">
-			<span class='heading-text'>#</span><input class='hashtag heading-text' type='text' value='{{hashtag}}'/>
+		<div class="pure-u-2-3">
+			<span class='heading-text'>#</span><input class='hashtag heading-text' type='text' value='{{search}}'/>
 		</div>
-		<div class="pure-u-1-5">
-			<a href='https://github.com/DDKnoll/Instagram-Infinite-Scroll'>Git Repo</a>
+		<div class="pure-u-1-3 icons">
+			<a class='icon' href='https://github.com/DDKnoll/Instagram-Infinite-Scroll'><i class="icon-github"></i></a>
+			<a class='icon' href='https://twitter.com/DDKnoll'><i class="icon-twitter"></i></a>
+			<a class='icon' href='https://plus.google.com/share?url=http://ddknoll.github.io/Instagram-Infinite-Scroll/'><i class="icon-gplus"></i></a>
 		</div>
 </div>
 	<!-- Loader -->
@@ -13,20 +15,31 @@
 	<!-- FEED -->
 	<div class="insta-target pure-g-r">
 		<!-- Loader -->
-		<div class="pure-u-1 loader">
-			{{#instagramData.data.length == 0}}
-				<img src="img/spiffygif_104x104.gif" width='104px' height='104px' alt="">
-				<h3>Loading Instagram Feed</h3>
+		<div class="pure-u-1-3 centered">
+			<h4>Instagram Results for #{{searched}}</h4>
+		</div>
+		<div class="pure-u-1-3 centered">
+			<h3>{{#loading}}<i class="icon-spin6 animate-spin"></i>Searching Instagram for #{{search}}<br>{{/loading}}{{message}}</h3>
+		</div>
+		<div class='pure-u-1-3 centered'>
+			<h3>
+				<a href='http://ddknoll.github.io/Instagram-Infinite-Scroll/?{{search}}'>Shareable #{{search}} link</a>
+			</h3>
+		</div>
+		{{#instagramData.data.length == 0}}
+			{{# !loading }}
+			<div class="pure-u-1 centered">
 				<p class='dimmer'>
 					Notice: You must have access to Instagram to view this content.</p>
 				<p class='dimmer'>
 					For the best experience use the newest version of the Chrome, Internet Explorer, or Firefox browser.
 				</p>
-			{{/instagramData.data.length == 0}}
-		</div>
-		<div class="pure-u-1">
-			<div class='button' onclick='insta.getNewer();'>Load newer posts</div>
-		</div>
+			</div>
+			{{/ !loading }}
+		{{/instagramData.data.length == 0}}
+<!-- 		<div class="pure-u-1">
+			<div class='button' onclick='insta.getNewer();'>Load newer Instagram posts</div>
+		</div> -->
 		<!-- Picture Feed -->
 		{{#instagramData.data:index}}
 		<div class="pure-u-1-3">
@@ -35,21 +48,39 @@
 			</div>
 		</div>
 		{{/instagramData.data}}
-		<div class="pure-u-1">
-			<div class='button' onclick='insta.getOlder();'>Load older posts</div>
+
+		<!-- LOADING AND END OF FEED -->
+		<div class="pure-u-1 centered">
+				<h3>{{#loading}}<i class="icon-spin6 animate-spin"></i> Loading More Images{{/loading}}</h3>
+			{{#endOfFeed}}
+				<h3>You have reached the end of the Instagram #{{search}} feed.</h3>
+			{{/endOfFeed}}
 		</div>
+
 	</div>
 </div>
 <!-- LIGHTBOX -->
-<div class="lightbox-outer{{#lightbox}} active{{/lightbox}}" onclick='insta.set("lightbox", false);'>
+<div class="lightbox-outer{{#lightbox}} active{{/lightbox}}"  onclick='insta.set("lightbox", false);' >
 
 	<div class="lightbox-border">
-		<i class="icon-cancel-circled" onclick='insta.set("lightbox", false);'></i>
 		<div class="lightbox-scrollable">
-
+			<div class='big-close' onclick='insta.set("lightbox", false);' >
+					X
+			</div>
 			{{#(current >= 0)}}
-			<!-- Picture Lightboxes -->
-				<img class='instagram-post-image' src="{{instagramData.data[current].images.standard_resolution.url}}" alt="">
+			<!-- Video Lightboxes -->
+			<!--
+				{{# instagramData.data[current].videos !== undefined }}
+				<video src="{{instagramData.data[current].videos.standard_resolution.url}}" controls>
+				  Your browser does not support the <code>video</code> element.
+				</video>
+				{{/ instagramData.data[current].videos !== undefined }}
+
+				{{# instagramData.data[current].videos == undefined }}
+					<img class='instagram-post-image' src="{{instagramData.data[current].images.standard_resolution.url}}" alt="">
+				{{/ instagramData.data[current].videos == undefined }}
+			-->
+			<img class='instagram-post-image' src="{{instagramData.data[current].images.standard_resolution.url}}" alt="">
 				<div class="comment">
 					<a target='_blank' href='http://instagram.com/{{instagramData.data[current].user.username}}'>
             <img class='profile-picture' src="{{instagramData.data[current].user.profile_picture}}" alt="">

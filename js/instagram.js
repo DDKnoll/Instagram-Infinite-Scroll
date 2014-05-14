@@ -7,13 +7,23 @@
 
 var instagramFeed = Ractive.extend({
   lazy:true,
-  data: {
-    instagramData: [],
-    current: -1,
-    min:0,
-    max:0,
-    lightbox:false,
-    endOfFeed:false
+
+  makeQuery: function(method){
+    var query = '';
+    var callback = '';
+    switch(method){
+    case 'before':
+      callback = "&amp;callback=instagramReceiverFrontAppend&amp;min_id="+this.data.instagramData.pagination.min_tag_id;
+      break;
+    case 'after':
+      callback = "&amp;callback=instagramReceiverRearAppend&amp;max_id="+this.data.instagramData.pagination.next_max_tag_id;
+      break;
+    case 'replace':
+      callback = "&amp;callback=instagramReceiverReplace";
+      return "https://api.instagram.com/v1/"+this.data.method+"/"+this.data.search+"/media/recent?client_id="+this.data.clientID+"&amp;count="+this.data.postsPerPage+callback;
+      break;
+    }
+    return "https://api.instagram.com/v1/"+this.data.method+"/"+this.data.searched+"/media/recent?client_id="+this.data.clientID+"&amp;count="+this.data.postsPerPage+callback;
   },
 
  /**
@@ -22,27 +32,21 @@ var instagramFeed = Ractive.extend({
   * Loads more instagram data.  Either replaces current data, appends data before feed, or appends data after feed
   */
   load: function(method){
-    if(this.data.loading == true){
-      //We can only be loading one script at a time.
+    //No older data to load. stop now.
+    if(method == 'after' && this.data.endOfFeed){
+      return false;
+    }
+    //We're already searching for something... Patience
+    if(this.data.loading == true) {
       return false;
     }
     else {
       this.set('loading', true);
     }
+
     var tag = document.createElement('script');
     tag.id = 'instagram-script-loader';
-    if (method=='replace'){
-      tag.src = "https://api.instagram.com/v1/tags/"+this.data.hashtag+"/media/recent?client_id="+this.clientID+"&amp;count=15&amp;callback=instagramReceiverReplace";
-    }
-    if (method=='before'){
-      tag.src = "https://api.instagram.com/v1/tags/"+this.data.hashtag+"/media/recent?client_id="+this.clientID+"&amp;count=15&amp;callback=instagramReceiverFrontAppend&amp;min_id="+this.data.instagramData.pagination.min_tag_id;
-    }
-    if (method=='after'){
-      if(this.data.endOfFeed == true){
-        return false;
-      }
-      tag.src = "https://api.instagram.com/v1/tags/"+this.data.hashtag+"/media/recent?client_id="+this.clientID+"&amp;count=15&amp;callback=instagramReceiverRearAppend&amp;max_id="+this.data.instagramData.pagination.next_max_tag_id;
-    }
+    tag.src = this.makeQuery(method);
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   },
@@ -75,26 +79,50 @@ var instagramFeed = Ractive.extend({
    */
   init: function(options){
 
+
+    // Initialize Parameters
+    this.data.instagramData = [];
+    this.data.current = -1;
+    this.data.min = 0;
+    this.data.max = 0,
+    this.data.lightbox = false;
+    this.data.endOfFeed = false;
+    this.data.postsPerPage = 6;
+    this.data.method = 'tags';
+    this.data.message = '';
+
+
     //Init Client ID
     if(options.clientID == undefined){
       console.log('No Client ID Provided');
       this.success = false;
       return false;
     } else{
-      this.clientID = options.clientID;
+      this.data.clientID = options.clientID;
     }
-    //Init hashtag
-    if(options.hashtag == undefined){
+
+    //Check URL for search parameter
+    query = (window.location.search.length ? window.location.search.slice(1) : undefined);
+    //Init search
+    if(!query && options.search == undefined){
       console.log('No Hashtag Provided');
       this.success = false;
       return false;
     } else{
-      this.data.hashtag = options.hashtag;
+      this.data.search = this.data.searched  = (query !== undefined ? query: options.search);
     }
 
     //Replace data.
     this.replaceData = function(newData){
-      this.set('instagramData', newData);
+      console.log(newData);
+      if(newData.data == undefined){
+        this.set('message', 'Sorry no results for #'+this.data.search+" :[");
+      } else{
+        this.set('instagramData', newData);
+        this.set('searched', this.data.search);
+        this.set('message', '');
+        this.set('endOfFeed', false);
+      }
       this.set('loading', false);
     }
     window.instagramReceiverReplace = (function(obj){
@@ -103,12 +131,16 @@ var instagramFeed = Ractive.extend({
       }
     })(this);
 
-    //Append data to rear and update data structure.
+    //Append data to front of array and update data structure.
     this.frontAppend = function(newData){
-      console.log('front Append');
       console.log(newData);
-      this.set('instagramData.data', newData.data.concat(this.data.instagramData.data));
-      this.data.instagramData.pagination.min_tag_id = newData.pagination.min_tag_id;
+      if(newData.data.length==0){
+        console.log('Nothing to append');
+      } else{
+        console.log('front Append');
+        this.set('instagramData.data', newData.data.concat(this.data.instagramData.data));
+        this.data.instagramData.pagination.min_tag_id = newData.pagination.min_tag_id;
+      }
       this.set('loading', false);
     }
     window.instagramReceiverFrontAppend = (function(obj){
@@ -136,7 +168,7 @@ var instagramFeed = Ractive.extend({
       }
     })(this);
 
-    this.observe('hashtag', function(oldVal, newVal){this.load('replace');});
+    this.observe('search', function(oldVal, newVal){this.load('replace');});
     this.load('replace');
   }
 
