@@ -4,6 +4,26 @@
 
 Instagram Infinite Feed
 
+The Instagram feed uses Ractive to render a mustache html template with
+instagram image data.
+
+How to Use:
+
+1. Create an instagram developer account and Client ID for your application.
+2. Include the Ractive.js and instagram.js scripts.
+3. Create a mustache template.
+4. Pass the Client ID, hashtag to search, and template string into the instagramFeed constructor.
+
+Example Template:
+
+
+	<!-- This loops over the data -->
+    {{#instagramData.data:index}}
+		<div class="insta-image">
+			<img src="{{instagramData.data[index].images.standard_resolution.url}}" alt="" />
+		</div>
+	{{/instagramData.data}} 
+
 Sample Usage:
 
     <script src="js/ractive/Ractive-legacy.0.3.9.min.js"></script><!-- Get Ractive-->
