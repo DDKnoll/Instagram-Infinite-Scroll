@@ -8,19 +8,28 @@ Sample Usage:
 
     <script src="js/ractive/Ractive-legacy.0.3.9.min.js"></script><!-- Get Ractive-->
     <script src="js/instagram.js"></script> <!-- Get Instagram extension -->
+    <script>
+    //Check URL for search parameter.
+    query = (window.location.search.length ? window.location.search.slice(1) : 'dribbble');
 
-
-    /** This code is just for the infinite scroll.  You don't have to use this. */
+    //Infinite Scroll Window Bindings.
     var infiniteScrollBinding = function(){
-        //Infinite Scroll Window Bindings
-        $(window).scroll(function(evt){
-          var bod = $('body')[0];
-          pageHeight = bod.offsetHeight;
-          bottomScroll = window.scrollY + bod.clientHeight;
-          if(pageHeight - bottomScroll < 200){
-              insta.load('after');
-          }
-        });
+      $(window).scroll(function(evt){
+        
+        //Calculate Window Values on every scroll event.
+        var bod = $('body')[0];
+        pageHeight = bod.offsetHeight;
+        bottomScroll = window.scrollY + bod.clientHeight;
+        distanceToBottom = pageHeight - bottomScroll;
+
+        //Load more posts as needed.
+        if(distanceToBottom < 200){
+          insta.load('after');
+        }
+        else if(window.scrollY <= 0){
+          insta.load('before');
+        }
+      });
     }
 
     // Get our template file.
@@ -36,6 +45,7 @@ Sample Usage:
       });
 
     });
+    </script>
 
 
 Function Reference
@@ -51,3 +61,4 @@ TODO:
 
 1. Minify JS
 2. Finish Documentation
+3. Develop Testing Framework

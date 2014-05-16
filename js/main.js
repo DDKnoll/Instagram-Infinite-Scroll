@@ -1,16 +1,20 @@
 
 var instafeed = {};
 
-//Check URL for search parameter
+//Check URL for search parameter.
 query = (window.location.search.length ? window.location.search.slice(1) : 'dribbble');
 
+ //Infinite Scroll Window Bindings.
 var infiniteScrollBinding = function(){
-  //Infinite Scroll Window Bindings
   $(window).scroll(function(evt){
+    //Calculate Window Values on every scroll event.
     var bod = $('body')[0];
     pageHeight = bod.offsetHeight;
     bottomScroll = window.scrollY + bod.clientHeight;
-    if(pageHeight - bottomScroll < 200){
+    distanceToBottom = pageHeight - bottomScroll;
+
+    //Load more posts as needed.
+    if(distanceToBottom < 200){
       insta.load('after');
     }
     else if(window.scrollY <= 0){

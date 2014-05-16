@@ -212,4 +212,10 @@ Media Queries
   .title .heading-text{
     font-size:36px;
   }
+  .title a i{
+    line-height:1.2em;
+  }
+  h3,h4{
+    margin: .2em;
+  }
 }
