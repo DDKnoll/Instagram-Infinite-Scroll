@@ -8,22 +8,57 @@
 var instagramFeed = Ractive.extend({
   lazy:true,
 
-  makeQuery: function(method){
-    var query = '';
-    var callback = '';
-    switch(method){
-    case 'before':
-      callback = "&amp;callback=instagramReceiverFrontAppend&amp;min_id="+this.data.instagramData.pagination.min_tag_id;
-      break;
-    case 'after':
-      callback = "&amp;callback=instagramReceiverRearAppend&amp;max_id="+this.data.instagramData.pagination.next_max_tag_id;
-      break;
-    case 'replace':
-      callback = "&amp;callback=instagramReceiverReplace";
-      return "https://api.instagram.com/v1/"+this.data.method+"/"+this.data.search+"/media/recent?client_id="+this.data.clientID+"&amp;count="+this.data.postsPerPage+callback;
-      break;
+  makeQuery: function(method) {
+    var base, endpoint, final, callback;
+    base = "https://api.instagram.com/v1";
+    switch (this.data.method) {
+      case "popular":
+        endpoint = "media/popular";
+        break;
+      case "tags":
+        if (typeof this.data.search !== 'string') {
+          throw new Error("No tag name specified. Use the 'tagName' option.");
+        }
+        endpoint = "tags/" + this.data.search + "/media/recent";
+        break;
+      case "location":
+        if (typeof this.data.location !== 'number') {
+          throw new Error("No location specified. Use the 'locationId' option.");
+        }
+        endpoint = "locations/" + this.data.search + "/media/recent";
+        break;
+      case "user":
+        if (typeof this.data.userId !== 'number') {
+          throw new Error("No user specified. Use the 'userId' option.");
+        }
+        if (typeof this.data.accessToken !== 'string') {
+          throw new Error("No access token. Use the 'accessToken' option.");
+        }
+        endpoint = "users/" + this.data.search + "/media/recent";
+        break;
+      default:
+        throw new Error("Invalid option for get: '" + this.data.get + "'.");
     }
-    return "https://api.instagram.com/v1/"+this.data.method+"/"+this.data.searched+"/media/recent?client_id="+this.data.clientID+"&amp;count="+this.data.postsPerPage+callback;
+    final = "" + base + "/" + endpoint;
+    if (this.data.clientID != null) {
+      final += "?client_id=" + this.data.clientID;
+    }
+    if (this.data.postsPerPage != null) {
+      final += "&count=" + this.data.postsPerPage;
+    }
+    switch(method){
+      case 'before':
+        callback = "&amp;callback=instagramReceiverFrontAppend&amp;min_id="+this.data.instagramData.pagination.min_tag_id;
+        break;
+      case 'after':
+        callback = "&amp;callback=instagramReceiverRearAppend&amp;max_id="+this.data.instagramData.pagination.next_max_tag_id;
+        break;
+      case 'replace':
+        callback = "&amp;callback=instagramReceiverReplace";
+        break;
+    }
+    console.log(final+callback);
+    return final+callback;
   },
 
  /**
@@ -43,6 +78,8 @@ var instagramFeed = Ractive.extend({
     else {
       this.set('loading', true);
     }
+
+    console.log('going to load');
 
     var tag = document.createElement('script');
     tag.id = 'instagram-script-loader';

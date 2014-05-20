@@ -60,7 +60,7 @@ Sample Usage:
         el: 'template-target',
         template: template,
         clientID: 'Your Instagram Client ID',
-        hashtag: 'webdesign',
+        hashtag: query,
         complete: infiniteScrollBinding
       });
 
@@ -80,5 +80,6 @@ Function Reference
 TODO:
 
 1. Minify JS
-2. Finish Documentation
-3. Develop Testing Framework
+2. Generate more query urls (search users, locations, etc.)
+3. Finish Documentation
+4. Develop Testing Framework
