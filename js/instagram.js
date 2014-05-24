@@ -78,11 +78,11 @@ var instagramFeed = Ractive.extend({
     else {
       this.set('loading', true);
     }
-
-    console.log('going to load');
-
+    console.log('calling IG API');
+    
     var tag = document.createElement('script');
     tag.id = 'instagram-script-loader';
+    tag.onerror = function(){console.log('unable to reach IG API');};
     tag.src = this.makeQuery(method);
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
@@ -137,6 +137,11 @@ var instagramFeed = Ractive.extend({
     } else{
       this.data.clientID = options.clientID;
     }
+    if(options.dataCallback != undefined){
+      this.dataCallback = options.dataCallback;
+    } else {
+      this.dataCallback = function(){};
+    }
 
     //Init search
     if(options.search == undefined){
@@ -147,9 +152,28 @@ var instagramFeed = Ractive.extend({
       this.data.search = this.data.searched  = options.search;
     }
 
+    this.validateData = function(data){
+      this.set('loading', false);
+      if(data.meta.code == 400){
+        this.error = true;
+        this.set('message', 'Invalid Client ID');
+        this.dataCallback(data);
+        return false;
+      } else if(data.meta.code == 200){
+        this.error = false;
+        return true;
+      } else {
+        this.error = true;
+        this.set('message', 'Error retrieving IG data.');
+        this.dataCallback(data);
+        console.log(data);
+        return false;
+      }
+    }
+
     //Replace data.
     this.replaceData = function(newData){
-      console.log(newData);
+      //console.log(newData);
       if(newData.data == undefined){
         this.set('message', 'Sorry no results for #'+this.data.search+" :[");
       } else{
@@ -158,17 +182,19 @@ var instagramFeed = Ractive.extend({
         this.set('message', '');
         this.set('endOfFeed', false);
       }
-      this.set('loading', false);
+      this.dataCallback(newData);
     }
     window.instagramReceiverReplace = (function(obj){
       return function (data) {
-        obj.replaceData(data);
+        if(obj.validateData(data)){
+          obj.replaceData(data);
+        }
       }
     })(this);
 
     //Append data to front of array and update data structure.
     this.frontAppend = function(newData){
-      console.log(newData);
+      //console.log(newData);
       if(newData.data.length==0){
         console.log('Nothing to append');
       } else{
@@ -176,18 +202,20 @@ var instagramFeed = Ractive.extend({
         this.set('instagramData.data', newData.data.concat(this.data.instagramData.data));
         this.data.instagramData.pagination.min_tag_id = newData.pagination.min_tag_id;
       }
-      this.set('loading', false);
+      this.dataCallback(newData);
     }
     window.instagramReceiverFrontAppend = (function(obj){
       return function (data) {
-        obj.frontAppend(data);
+        if(obj.validateData(data)){
+          obj.frontAppend(data);
+        }
       }
     })(this);
 
     //Append data to rear and update data structure.
     this.rearAppend = function(newData){
       console.log('rear Append');
-      console.log(newData);
+      //console.log(newData);
       this.set('instagramData.data', this.data.instagramData.data.concat(newData.data));
       //Set the pagination
       if(newData.pagination.next_max_tag_id === undefined){
@@ -195,11 +223,13 @@ var instagramFeed = Ractive.extend({
       } else{
         this.data.instagramData.pagination.next_max_tag_id = newData.pagination.next_max_tag_id;
       }
-      this.set('loading', false);
+      this.dataCallback(newData);
     }
     window.instagramReceiverRearAppend = (function(obj){
       return function (data) {
-        obj.rearAppend(data);
+        if(obj.validateData(data)){
+          obj.rearAppend(data);
+        }
       }
     })(this);
 
