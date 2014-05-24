@@ -78,25 +78,11 @@ var instagramFeed = Ractive.extend({
     else {
       this.set('loading', true);
     }
-    switch(method){
-      case 'replace':
-        callback = instagramReceiverReplace;
-        break;
-      case 'before':
-        callback = instagramReceiverFrontAppend;
-        break;
-      case 'after':
-        callback = instagramReceiverRearAppend;
-        break;
-      default:
-        console.log('Unknown load method');
-        return false;
-    }
     console.log('calling IG API');
     
     var tag = document.createElement('script');
     tag.id = 'instagram-script-loader';
-    tag.onerror = function(){console.log('erroer');};
+    tag.onerror = function(){console.log('unable to reach IG API');};
     tag.src = this.makeQuery(method);
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
@@ -187,7 +173,7 @@ var instagramFeed = Ractive.extend({
 
     //Replace data.
     this.replaceData = function(newData){
-      console.log(newData);
+      //console.log(newData);
       if(newData.data == undefined){
         this.set('message', 'Sorry no results for #'+this.data.search+" :[");
       } else{
@@ -208,7 +194,7 @@ var instagramFeed = Ractive.extend({
 
     //Append data to front of array and update data structure.
     this.frontAppend = function(newData){
-      console.log(newData);
+      //console.log(newData);
       if(newData.data.length==0){
         console.log('Nothing to append');
       } else{
@@ -221,7 +207,7 @@ var instagramFeed = Ractive.extend({
     window.instagramReceiverFrontAppend = (function(obj){
       return function (data) {
         if(obj.validateData(data)){
-          obj.replaceData(data);
+          obj.frontAppend(data);
         }
       }
     })(this);
@@ -229,7 +215,7 @@ var instagramFeed = Ractive.extend({
     //Append data to rear and update data structure.
     this.rearAppend = function(newData){
       console.log('rear Append');
-      console.log(newData);
+      //console.log(newData);
       this.set('instagramData.data', this.data.instagramData.data.concat(newData.data));
       //Set the pagination
       if(newData.pagination.next_max_tag_id === undefined){
@@ -242,7 +228,7 @@ var instagramFeed = Ractive.extend({
     window.instagramReceiverRearAppend = (function(obj){
       return function (data) {
         if(obj.validateData(data)){
-          obj.replaceData(data);
+          obj.rearAppend(data);
         }
       }
     })(this);
