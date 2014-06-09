@@ -13,6 +13,31 @@ $.get( '../templates/twitter-feed.rac').then( function ( val ) {
 	);
 });//Get Template
 
+/** Compares the two arrays for any repeated IDs.
+ *
+ */
+function hasDuplicates(newData, oldData){
+	for (var i = newData.data.length - 1; i >= 0; i--) {
+		for (var j = oldData.length - 1; j >= 0; j--) {
+			oldData[j];
+		};
+	};
+	return false;
+}
+
+function testLoadDuplicates(insta){
+  	insta.load('before', function(returnedData){
+		test('Checking for duplicated in before method.', function(){
+			ok(hasDuplicates(insta.data.instagramData, returnedData) == false, 'Load("Before") did not load any duplicate data.');
+		});
+	});
+	insta.load('after', function(returnedData){
+		test('Checking for loading data with Before and After methods.', function(){
+  			ok(hasDuplicates(insta.data.instagramData, returnedData) == false, 'Load("After") did not load any duplicate data.');
+  		});
+  	});
+}
+
 testBadClientID = function(nextTest){
   /**
    * Initialize our Template
@@ -46,15 +71,19 @@ makeCorrectFeed = function(nextTest){
 	instaGood = new instagramFeed({
       el: 'template-target',
       template: template,
-      clientID: 'dsa',
+      clientID: 'fd88310566744275a3d68092d9c175d1',
       search: 'dribbble',
-      dataCallback: function(){
-
-      },
       complete: function(){
+      	var insta = this;
       	test('Instagram object created with good Client ID.', function(){
 	      	ok(true, "Created!");
 	    });
+	    window.setTimeout(function(){
+	    	//wait for a second, then try loading more data.
+	    	testLoadDuplicates(insta);
+	    	//wait for a second, then try loading more data.
+	    	testLoadDuplicates(insta);
+	    }, 1000)
       }
     });//Ractive init
 };
