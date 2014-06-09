@@ -8,7 +8,7 @@
 var instagramFeed = Ractive.extend({
   lazy:true,
 
-  makeQuery: function(method) {
+  makeQuery: function(place) {
     var base, endpoint, final, callback;
     base = "https://api.instagram.com/v1";
     switch (this.data.method) {
@@ -28,13 +28,14 @@ var instagramFeed = Ractive.extend({
         endpoint = "locations/" + this.data.search + "/media/recent";
         break;
       case "user":
-        if (typeof this.data.userId !== 'number') {
+        if (typeof this.data.search !== 'number') {
           throw new Error("No user specified. Use the 'userId' option.");
         }
-        if (typeof this.data.accessToken !== 'string') {
-          throw new Error("No access token. Use the 'accessToken' option.");
+        if (typeof this.data.clientID !== 'string') {
+          throw new Error("Invalid access token. Make sure you have a valid Instagram API access token.");
         }
         endpoint = "users/" + this.data.search + "/media/recent";
+        console.log(endpoint);
         break;
       default:
         throw new Error("Invalid option for get: '" + this.data.get + "'.");
@@ -46,7 +47,7 @@ var instagramFeed = Ractive.extend({
     if (this.data.postsPerPage != null) {
       final += "&count=" + this.data.postsPerPage;
     }
-    switch(method){
+    switch(place){
       case 'before':
         callback = "&amp;callback=instagramReceiverFrontAppend&amp;min_id="+this.data.instagramData.pagination.min_tag_id;
         break;
@@ -66,13 +67,17 @@ var instagramFeed = Ractive.extend({
   *
   * Loads more instagram data.  Either replaces current data, appends data before feed, or appends data after feed
   */
-  load: function(method){
+  load: function(place, callback){
+    if(callback !== undefined){
+      this.dataCallback = callback;
+    }
     //No older data to load. stop now.
-    if(method == 'after' && this.data.endOfFeed){
+    if(place == 'after' && this.data.endOfFeed){
       return false;
     }
     //We're already searching for something... Patience
     if(this.data.loading == true) {
+      console.log('already loading');
       return false;
     }
     else {
@@ -83,7 +88,7 @@ var instagramFeed = Ractive.extend({
     var tag = document.createElement('script');
     tag.id = 'instagram-script-loader';
     tag.onerror = function(){console.log('unable to reach IG API');};
-    tag.src = this.makeQuery(method);
+    tag.src = this.makeQuery(place);
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   },
