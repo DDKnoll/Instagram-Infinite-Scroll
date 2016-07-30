@@ -1,0 +1,1 @@
+I do not collect any information on users or visitors to this site.  The content of this repository and all of the code for this static webpage are free to view, use and distribute as you please.  Please refer to the terms of use and privacy policy for Instagram before building an application with their API.
